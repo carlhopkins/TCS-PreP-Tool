@@ -2,7 +2,13 @@
 
 **Current Ver - v25.07**
 
-Use batchfile to launch utility directly.
+Use batchfile <code>TCS-PreP-Load.bat</code> in Releases to launch utility directly, you do not need to clone or download this repo.
+
+or...
+
+Alternatively you can call script directly within Powershell (elevated) using the below :- 
+
+<code>iwr -useb https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/TCS-PreP-Shell.ps1 | iex</code>
 
 Note:
 

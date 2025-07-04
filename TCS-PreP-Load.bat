@@ -1,8 +1,9 @@
 @echo off 
-REM # TCS PreP Loader - v0.25 - Copyright (c) 2025 Carl Hopkins
+REM # Universal Powershell Loader - v0.25 - Copyright (c) 2025 Carl Hopkins
+REM # To download and launch TCS-PreP-Shell script, direct from repo
 
 ECHO +====================================================+
-ECHO +              TCS PreP Loader - v0.25               +
+ECHO +       Universal Powershell Loader - v0.25          +
 ECHO +====================================================+
 
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command ""iwr -useb https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/TCS-PreP-Shell.ps1 | iex""' -Verb RunAs}"
