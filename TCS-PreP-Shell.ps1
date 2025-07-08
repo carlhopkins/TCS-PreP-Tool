@@ -20,19 +20,23 @@ Write-Host ""
 Write-Host "Loading, please wait..."
 Write-Host ""
 
-# Hack to load in required resources
+# Download required local resources
 Import-Module BitsTransfer
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/bimage.jpg" -Destination bimage.jpg
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/himage.jpg" -Destination himage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/setimage.jpg" -Destination setimage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
 Add-Type -Assembly System.Drawing
-$bimage = [System.Drawing.Image]::FromFile("./bimage.jpg")
+$simage = [System.Drawing.Image]::FromFile("./setimage.jpg")
 Add-Type -Assembly System.Drawing
-$himage = [System.Drawing.Image]::FromFile("./himage.jpg")
+$bimage = [System.Drawing.Image]::FromFile("./trekimage.jpg")
+Add-Type -Assembly System.Drawing
+$himage = [System.Drawing.Image]::FromFile("./tcsimage.jpg")
 
-# Check if winget is installed
+# Check if Winget is installed
 Write-Host "Checking for winget..."
 if (Test-Path ~\AppData\Local\Microsoft\WindowsApps\winget.exe){
-    'Winget Already Installed'
+    Write-Host "Winget Already Installed"
+    $ResultText.text = "Winget Already Installed"
 }  
 else{
 	Write-Host "Winget not found, installing it now."
@@ -68,17 +72,15 @@ $Form.Icon                    = [System.Drawing.Icon]::FromHandle((New-Object Sy
 $Form.Width                   = $objImage.Width
 $Form.Height                  = $objImage.Height
 
-#Panel1 - L/H Spacer
-
+# Panel1 - L/H Spacer
 $Panel1                          = New-Object system.Windows.Forms.Panel
 $Panel1.height                   = 250
 $Panel1.width                    = 250
 $Panel1.location                 = New-Object System.Drawing.Point(5,75)
 
-#Panel2 - Actions
-
+# Panel2 - Actions
 $Panel2                          = New-Object system.Windows.Forms.Panel
-$Panel2.height                   = 250
+$Panel2.height                   = 460
 $Panel2.width                    = 250
 $Panel2.location                 = New-Object System.Drawing.Point(265,75)
 
@@ -86,22 +88,27 @@ $warptweaks                      = New-Object system.Windows.Forms.Button
 $warptweaks.Image                = $bimage
 $warptweaks.width                = 205
 $warptweaks.height               = 205
-$warptweaks.location             = New-Object System.Drawing.Point(5,10)
+$warptweaks.location             = New-Object System.Drawing.Point(5,20)
 $warptweaks.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-#Panel3 - R/H Spacer
+$wingetapps                      = New-Object system.Windows.Forms.Button
+$wingetapps.Image                = $simage
+$wingetapps.width                = 205
+$wingetapps.height               = 205
+$wingetapps.location             = New-Object System.Drawing.Point(5,245)
+$wingetapps.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
+# Panel3 - R/H Spacer
 $Panel3                          = New-Object system.Windows.Forms.Panel
 $Panel3.height                   = 250
 $Panel3.width                    = 250
 $Panel3.location                 = New-Object System.Drawing.Point(525,75)
 
 # Status Panel
-
 $Panel4                          = New-Object system.Windows.Forms.Panel
 $Panel4.height                   = 65
 $Panel4.width                    = 730
-$Panel4.location                 = New-Object System.Drawing.Point(20,410)
+$Panel4.location                 = New-Object System.Drawing.Point(20,525)
 
 $Label10                         = New-Object system.Windows.Forms.Label
 $Label10.text                    = "Current Status:"
@@ -118,32 +125,34 @@ $ResultText.location             = New-Object System.Drawing.Point(5,25)
 $ResultText.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',8)
 
 # Branding Panel
-
 $Panel0                          = New-Object system.Windows.Forms.Panel
 $Panel0.height                   = 70
 $Panel0.width                    = 730
 $Panel0.location                 = New-Object System.Drawing.Point(5,5)
 
 $PictureBox1                     = New-Object system.Windows.Forms.PictureBox
-$PictureBox1.width               = 398
-$PictureBox1.height              = 38
-$PictureBox1.location            = New-Object System.Drawing.Point(168,15)
+$PictureBox1.width               = 600
+$PictureBox1.height              = 60
+$PictureBox1.location            = New-Object System.Drawing.Point(65,15)
 $PictureBox1.image               = $himage
 $PictureBox1.SizeMode            = [System.Windows.Forms.PictureBoxSizeMode]::zoom
 
 $Form.controls.AddRange(@($Panel0,$Panel1,$Panel2,$Panel3,$Panel4))
 $Panel0.controls.AddRange(@($PictureBox1))
-$Panel2.controls.AddRange(@($warptweaks))
+$Panel2.controls.AddRange(@($warptweaks,$wingetapps))
 $Panel4.controls.AddRange(@($Label10,$ResultText))
 
-# Beginning of functions
+# App loaded and Ready for User input
+Write-Host "TCS PreP Tool Ready...Please select action!"
+$ResultText.text = "TCS PreP Tool Ready...Please select action!"
 
-Write-Host "TCS PreP Tool Loaded & Ready..."
-$ResultText.text = "TCS PreP Tool Loaded & Ready..."
-
+# Start automated cleanup processes
 $warptweaks.Add_Click({
 Write-Host "Cleanup in Progress..."
     $ResultText.text = "Cleanup in Progress..."
+
+    # Pause to init
+Start-Sleep -Seconds 3
 
 Write-Host "Disabling Telemetry..."
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
@@ -262,8 +271,8 @@ Write-Host "Showing known file extensions..."
 Write-Host "Removing Bloatware"
 
 $Bloatware = @(
-    #Sponsored Windows AppX Apps
-    #Add sponsored/featured apps to remove in the "*AppName*" format
+    # Sponsored Windows AppX Apps
+    # Add sponsored/featured apps to remove in the "*AppName*" format
     "*EclipseManager*"
     "*ActiproSoftwareLLC*"
     "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
@@ -271,6 +280,7 @@ $Bloatware = @(
     "*PandoraMediaInc*"
     "*CandyCrush*"
     "*BubbleWitch3Saga*"
+    "*BubbleWitchSaga*"
     "*Wunderlist*"
     "*Flipboard*"
     "*Twitter*"
@@ -299,7 +309,6 @@ $Bloatware = @(
     "*Royal Revolt*"
     "*Sway*"
     "*Speed Test*"
-    "*Dolby*"
     "*Disney*"
 )
     foreach ($Bloat in $Bloatware) {
@@ -309,17 +318,99 @@ $Bloatware = @(
         $ResultText.text = "Trying to remove $Bloat..."
     }
 
-# Begin winget loop for base utils
+Write-Host "Cleanup complete! Please wait..."
+    $ResultText.text = "Cleanup complete! Please wait..."
 
-#Write-Host "Installing 7-Zip Compression Tool"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing 7-Zip Compression Tool... Please Wait" 
-#    winget install -e 7zip.7zip | Out-Host
-#    if($?) { Write-Host "Installed 7-Zip Compression Tool" }
-#    $ResultText.text = "`r`n" + "Finished Installing 7-Zip Compression Tool" + "`r`n" + "`r`n" + "Ready for Next Task"
+# Pause to init
+Start-Sleep -Seconds 3
 
-# End and exit script
-Write-Host "TCS PreP Tool actions complete! Please reboot your system NOW!"
-    $ResultText.text = "TCS PreP Tool actions complete! Please reboot your system NOW!"
+# End routine
+Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+
+})
+
+# Winget Utilities Install Routine, please see MANIFEST.md for current and pending list of apps.
+$wingetapps.Add_Click({
+Write-Host "Installation in Progress..."
+    $ResultText.text = "Installation in Progress..."
+
+# Pause to init
+Start-Sleep -Seconds 3
+
+# 7-Zip Compression Tool
+Write-Host "Installing 7-Zip Compression Tool"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing 7-Zip Compression Tool... Please Wait" 
+    winget install -e --id 7zip.7zip | Out-Host
+    if($?) { Write-Host "Installed 7-Zip Compression Tool" }
+    $ResultText.text = "`r`n" + "Finished Installing 7-Zip Compression Tool" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Paint Dot Net
+Write-Host "Installing Paint Dot Net"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Paint Dot Net... Please Wait" 
+    winget install -e --id dotPDNLLC.paintdotnet | Out-Host
+    if($?) { Write-Host "Installed Paint Dot Net" }
+    $ResultText.text = "`r`n" + "Finished Installing Paint Dot Net" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# PDF reDirect
+Write-Host "Installing PDF reDirect"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing PDF reDirect... Please Wait" 
+    winget install -e --id EXPSystems.PDFreDirect | Out-Host
+    if($?) { Write-Host "Installed PDF reDirect" }
+    $ResultText.text = "`r`n" + "Finished Installing PDF reDirect" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Foxit PDF Reader
+Write-Host "Installing Foxit PDF Reader"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
+    winget install -e --id Foxit.FoxitReader | Out-Host
+    if($?) { Write-Host "Installed Foxit PDF Reader" }
+    $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Microsoft Office 365 Apps
+Write-Host "Installing Microsoft Office 365 Apps"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Microsoft Office 365 Apps... Please Wait" 
+    winget install -e --id Microsoft.Office | Out-Host
+    if($?) { Write-Host "Installed Microsoft Office 365 Apps" }
+    $ResultText.text = "`r`n" + "Finished Installing Microsoft Office 365 Apps" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# PuTTY (AWAITING TESTING/FEEDBACK)
+#Write-Host "Installing PuTTY"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing PuTTY... Please Wait" 
+#    winget install -e --id PuTTY.PuTTY | Out-Host
+#    if($?) { Write-Host "Installed PuTTY" }
+#    $ResultText.text = "`r`n" + "Finished Installing PuTTY" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Advanced IP Scanner (AWAITING TESTING/FEEDBACK)
+#Write-Host "Installing Advanced IP Scanner"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing Advanced IP Scanner... Please Wait" 
+#    winget install -e --id Famatech.AdvancedIPScanner | Out-Host
+#    if($?) { Write-Host "Installed Advanced IP Scanner" }
+#    $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Draw Dot Io (AWAITING TESTING/FEEDBACK)
+#Write-Host "Installing Draw Dot Io"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
+#    winget install -e --id JGraph.Draw | Out-Host
+#    if($?) { Write-Host "Installed Draw Dot Io" }
+#    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# WINGET MANIFEST TEMPLATE - COPY BELOW TO USE
+# APP NAME
+#Write-Host "Installing APPNAME"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing APPNAME... Please Wait" 
+#    winget install -e APP.LINK | Out-Host
+#    if($?) { Write-Host "Installed APPNAME" }
+#    $ResultText.text = "`r`n" + "Finished Installing APPNAME" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+Write-Host "Installation complete! Please wait..."
+    $ResultText.text = "Installation complete! Please wait..."
+
+# Pause to init
+Start-Sleep -Seconds 3
+
+# End routine
+Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
 
 })
 
