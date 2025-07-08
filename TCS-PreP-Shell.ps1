@@ -1,4 +1,4 @@
-# TCS (Machine) PreParation Tool - v25.07 - Copyright (c) 2025 Carl Hopkins
+# TCS Machine Preparation Tool - v25.07 - Copyright (c) 2025 Carl Hopkins
 
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -51,7 +51,7 @@ else{
 # GUI Specs
 $Form                         = New-Object system.Windows.Forms.Form
 $Form.ClientSize              = New-Object System.Drawing.Point(780,780)
-$Form.text                    = "TCS (Machine) PreP Tool"
+$Form.text                    = "TCS Machine Preparation Tool - v25.07"
 $Form.StartPosition           = "CenterScreen"
 $Form.TopMost                 = $false
 $Form.BackColor               = [System.Drawing.ColorTranslator]::FromHtml("#e9e9e9")
