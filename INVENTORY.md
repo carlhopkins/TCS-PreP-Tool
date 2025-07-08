@@ -6,6 +6,7 @@
 + Paint Dot Net
 + PDF reDirect
 + Foxit PDF Reader
++ Microsoft Office 365
 
 Note: Future apps (subject to testing)
 + Draw.io
