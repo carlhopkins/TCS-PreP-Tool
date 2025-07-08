@@ -1,4 +1,4 @@
-## TCS Machine PreParation Tool ##
+## TCS Machine Preparation Tool ##
 ![image](https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/refs/heads/main/tcsimage.jpg)
 
 **Current Ver - v25.07**
