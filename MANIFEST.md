@@ -1,4 +1,4 @@
-## TCS (Machine) PreParation Tool - App Manifest ##
+## TCS Machine PreParation Tool - App Manifest ##
 
 **List of Utilities installed by Winget**
 
