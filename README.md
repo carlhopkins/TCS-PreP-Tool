@@ -1,4 +1,4 @@
-## TCS (Machine) PreParation Tool ##
+## TCS Machine PreParation Tool ##
 
 **Current Ver - v25.07**
 
