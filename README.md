@@ -2,7 +2,7 @@
 
 **Current Ver - v25.07**
 
-Use batchfile <code>TCS-PreP-Load.bat</code> in Releases to launch utility directly, you do not need to clone or download this repo.
+Use batchfile [TCS-PreP-Load.bat](https://github.com/carlhopkins/TCS-PreP-Tool/releases/download/Loader/TCS-PreP-Load.bat) under [Releases](https://github.com/carlhopkins/TCS-PreP-Tool/releases) to launch utility directly, you do not need to clone or download this repo.
 
 or...
 
