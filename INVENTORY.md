@@ -1,4 +1,4 @@
-## TCS (Machine) PreParation Tool - App inventory##
+## TCS (Machine) PreParation Tool - App inventory ##
 
 **List of Utilities installed by Winget**
 
