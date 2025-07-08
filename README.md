@@ -12,6 +12,6 @@ Alternatively you can call script directly within Powershell (elevated) using th
 
 Note:
 
-Based upon Windows 10 PreP script by [Carl Hopkins](https://github.com/carlhopkins/Win10-preinstall-tool).
+Based upon [Windows 10 PreP](https://github.com/carlhopkins/Win10-preinstall-tool) script by [Carl Hopkins](https://github.com/carlhopkins).
 
 With thanks to [Chris Titus](https://github.com/ChrisTitusTech), for original script source and inspiration.
