@@ -341,56 +341,56 @@ Start-Sleep -Seconds 3
 # 7-Zip Compression Tool
 Write-Host "Installing 7-Zip Compression Tool"
     $ResultText.text = "`r`n" +"`r`n" + "Installing 7-Zip Compression Tool... Please Wait" 
-    winget install -e --id 7zip.7zip | Out-Host
+    winget install -e --accept-source-agreements --accept-package-agreements --id 7zip.7zip | Out-Host
     if($?) { Write-Host "Installed 7-Zip Compression Tool" }
     $ResultText.text = "`r`n" + "Finished Installing 7-Zip Compression Tool" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Paint Dot Net
 Write-Host "Installing Paint Dot Net"
     $ResultText.text = "`r`n" +"`r`n" + "Installing Paint Dot Net... Please Wait" 
-    winget install -e --id dotPDNLLC.paintdotnet | Out-Host
+    winget install -e --accept-source-agreements --accept-package-agreements --id dotPDNLLC.paintdotnet | Out-Host
     if($?) { Write-Host "Installed Paint Dot Net" }
     $ResultText.text = "`r`n" + "Finished Installing Paint Dot Net" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # PDF reDirect
 Write-Host "Installing PDF reDirect"
     $ResultText.text = "`r`n" +"`r`n" + "Installing PDF reDirect... Please Wait" 
-    winget install -e --id EXPSystems.PDFreDirect | Out-Host
+    winget install -e --accept-source-agreements --accept-package-agreements --id EXPSystems.PDFreDirect | Out-Host
     if($?) { Write-Host "Installed PDF reDirect" }
     $ResultText.text = "`r`n" + "Finished Installing PDF reDirect" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Foxit PDF Reader
 Write-Host "Installing Foxit PDF Reader"
     $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
-    winget install -e --id Foxit.FoxitReader | Out-Host
+    winget install -e --accept-source-agreements --accept-package-agreements --id Foxit.FoxitReader | Out-Host
     if($?) { Write-Host "Installed Foxit PDF Reader" }
     $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Microsoft Office 365 Apps
 Write-Host "Installing Microsoft Office 365 Apps"
     $ResultText.text = "`r`n" +"`r`n" + "Installing Microsoft Office 365 Apps... Please Wait" 
-    winget install -e --id Microsoft.Office | Out-Host
+    winget install -e --accept-source-agreements --accept-package-agreements --id Microsoft.Office | Out-Host
     if($?) { Write-Host "Installed Microsoft Office 365 Apps" }
     $ResultText.text = "`r`n" + "Finished Installing Microsoft Office 365 Apps" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # PuTTY (AWAITING TESTING/FEEDBACK)
 #Write-Host "Installing PuTTY"
 #    $ResultText.text = "`r`n" +"`r`n" + "Installing PuTTY... Please Wait" 
-#    winget install -e --id PuTTY.PuTTY | Out-Host
+#    winget install -e --accept-source-agreements --accept-package-agreements --id PuTTY.PuTTY | Out-Host
 #    if($?) { Write-Host "Installed PuTTY" }
 #    $ResultText.text = "`r`n" + "Finished Installing PuTTY" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Advanced IP Scanner (AWAITING TESTING/FEEDBACK)
 #Write-Host "Installing Advanced IP Scanner"
 #    $ResultText.text = "`r`n" +"`r`n" + "Installing Advanced IP Scanner... Please Wait" 
-#    winget install -e --id Famatech.AdvancedIPScanner | Out-Host
+#    winget install -e --accept-source-agreements --accept-package-agreements --id Famatech.AdvancedIPScanner | Out-Host
 #    if($?) { Write-Host "Installed Advanced IP Scanner" }
 #    $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Draw Dot Io (AWAITING TESTING/FEEDBACK)
 #Write-Host "Installing Draw Dot Io"
 #    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
-#    winget install -e --id JGraph.Draw | Out-Host
+#    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
 #    if($?) { Write-Host "Installed Draw Dot Io" }
 #    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
 
@@ -398,7 +398,7 @@ Write-Host "Installing Microsoft Office 365 Apps"
 # APP NAME
 #Write-Host "Installing APPNAME"
 #    $ResultText.text = "`r`n" +"`r`n" + "Installing APPNAME... Please Wait" 
-#    winget install -e APP.LINK | Out-Host
+#    winget install -e --accept-source-agreements --accept-package-agreements --id APP.LINK | Out-Host
 #    if($?) { Write-Host "Installed APPNAME" }
 #    $ResultText.text = "`r`n" + "Finished Installing APPNAME" + "`r`n" + "`r`n" + "Ready for Next Task"
 
