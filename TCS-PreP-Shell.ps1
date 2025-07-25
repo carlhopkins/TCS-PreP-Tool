@@ -25,6 +25,7 @@ Import-Module BitsTransfer
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/setimage.jpg" -Destination setimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
+#Start-BitsTransfer -Source "https://github.com/carlhopkins/TCS-PreP-Tool/raw/refs/heads/main/DotNet/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
 Add-Type -Assembly System.Drawing
 $simage = [System.Drawing.Image]::FromFile("./setimage.jpg")
 Add-Type -Assembly System.Drawing
@@ -414,6 +415,13 @@ Write-Host "Installing DotNetFx3. Please wait..."
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
     if($?) { Write-Host "The operation completed successfully." }
     $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
+
+# DotNet FX3 Install Routine (online version)
+#Write-Host "Installing DotNetFx3. Please wait..."
+#    $ResultText.text = "Installing DotNetFx3. Please wait..."
+#    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /LimitAccess /Source:./
+#    if($?) { Write-Host "The operation completed successfully." }
+#    $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
 
 # Pause to init
 Start-Sleep -Seconds 3
