@@ -408,6 +408,16 @@ Write-Host "Installation complete! Please wait..."
 # Pause to init
 Start-Sleep -Seconds 3
 
+# DotNet FX3 Install Routine (online version)
+Write-Host "Installing DotNetFx3. Please wait..."
+    $ResultText.text = "Installing DotNetFx3. Please wait..."
+    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
+    if($?) { Write-Host "The operation completed successfully." }
+    $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
+
+# Pause to init
+Start-Sleep -Seconds 3
+
 # End routine
 Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
     $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
