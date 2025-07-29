@@ -77,7 +77,7 @@ $Panel1.location                 = New-Object System.Drawing.Point(5,75)
 
 # Panel2 - Actions
 $Panel2                          = New-Object system.Windows.Forms.Panel
-$Panel2.height                   = 430
+$Panel2.height                   = 510
 $Panel2.width                    = 250
 $Panel2.location                 = New-Object System.Drawing.Point(265,75)
 
@@ -95,12 +95,19 @@ $wingetapps.height               = 68
 $wingetapps.location             = New-Object System.Drawing.Point(5,245)
 $wingetapps.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
-$dotnetapps                      = New-Object system.Windows.Forms.Button
-$dotnetapps.text                 = "Install DotNet Packages"
-$dotnetapps.width                = 205
-$dotnetapps.height               = 68
-$dotnetapps.location             = New-Object System.Drawing.Point(5,333)
-$dotnetapps.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+$dismonline                      = New-Object system.Windows.Forms.Button
+$dismonline.text                 = "Install Online DISM Packages"
+$dismonline.width                = 205
+$dismonline.height               = 68
+$dismonline.location             = New-Object System.Drawing.Point(5,333)
+$dismonline.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+
+$dismoffline                      = New-Object system.Windows.Forms.Button
+$dismoffline.text                 = "Install Offline DISM Packages"
+$dismoffline.width                = 205
+$dismoffline.height               = 68
+$dismoffline.location             = New-Object System.Drawing.Point(5,421)
+$dismoffline.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 # Panel3 - R/H Spacer
 $Panel3                          = New-Object system.Windows.Forms.Panel
@@ -112,7 +119,7 @@ $Panel3.location                 = New-Object System.Drawing.Point(525,75)
 $Panel4                          = New-Object system.Windows.Forms.Panel
 $Panel4.height                   = 65
 $Panel4.width                    = 730
-$Panel4.location                 = New-Object System.Drawing.Point(20,500)
+$Panel4.location                 = New-Object System.Drawing.Point(20,570)
 
 $Label10                         = New-Object system.Windows.Forms.Label
 $Label10.text                    = "Current Status:"
@@ -143,7 +150,7 @@ $PictureBox1.SizeMode            = [System.Windows.Forms.PictureBoxSizeMode]::zo
 
 $Form.controls.AddRange(@($Panel0,$Panel1,$Panel2,$Panel3,$Panel4))
 $Panel0.controls.AddRange(@($PictureBox1))
-$Panel2.controls.AddRange(@($warptweaks,$wingetapps,$dotnetapps))
+$Panel2.controls.AddRange(@($warptweaks,$wingetapps,$dismonline,$dismoffline))
 $Panel4.controls.AddRange(@($Label10,$ResultText))
 
 # App loaded and Ready for User input
@@ -425,19 +432,42 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 
 })
 
-$dotnetapps.Add_Click({
+$dismonline.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
 
 # Pause to init
 Start-Sleep -Seconds 2
 
-# DotNet FX3 Install Routine (online version)
+# DISM Install Routine (online version)
 Write-Host "Installing DotNetFx3. Please wait..."
     $ResultText.text = "Installing DotNetFx3. Please wait..."
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
     if($?) { Write-Host "The operation completed successfully." }
     $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
+
+# Pause to init
+Start-Sleep -Seconds 2
+
+# End subroutine
+Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+
+})
+
+$dismoffline.Add_Click({
+Write-Host "Installation in Progress..."
+    $ResultText.text = "Installation in Progress..."
+
+# Pause to init
+Start-Sleep -Seconds 2
+
+# DISM Install Routine (offline version)
+Write-Host "Installing DotNetFx3. Please wait..."
+    $ResultText.text = "Installing DotNetFx3. Please wait..."
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/Packages/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
+    Start-Sleep -Seconds 2
+    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /LimitAccess /Source:./
 
 # Pause to init
 Start-Sleep -Seconds 2
