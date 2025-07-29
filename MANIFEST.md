@@ -1,4 +1,4 @@
-## TCS Machine Preparation Tool - App Manifest ##
+## TCS Machine Preparation Tool - App Manifest - v25.08 ##
 
 **List of Utilities installed by Winget**
 
@@ -11,11 +11,16 @@
 Note: Future apps (subject to testing)
 + PuTTY
 + Advanced IP Scanner
-+ Draw.io
++ Notepad ++
++ Draw.io 
+
+**List of Utilities installed by DISM Enablement**
+
++ DotNetFX 3.5
 
 **List of Utilities installed by MSI loading/TCS Repo**
 
-Note: Not yet implimented in v25.07
+Note: Not yet implimented in v25.08
 + BitDefender/GravityZone Client
 + Mirador MDM Client/Agent
 + Watchguard SSL VPN Client

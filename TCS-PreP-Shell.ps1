@@ -1,4 +1,4 @@
-# TCS Machine Preparation Tool - v25.07 - Copyright (c) 2025 Carl Hopkins
+# TCS Machine Preparation Tool - v25.08 - Copyright (c) 2025 Carl Hopkins
 
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -14,7 +14,7 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 # Init
 Write-Host "+===================================================+"
-Write-Host ".              TCS PreP Shell - v25.07              ."
+Write-Host ".              TCS PreP Shell - v25.08              ."
 Write-Host "+===================================================+"
 Write-Host ""
 Write-Host "Loading, please wait..."
@@ -22,12 +22,8 @@ Write-Host ""
 
 # Download required local resources
 Import-Module BitsTransfer
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/setimage.jpg" -Destination setimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
-#Start-BitsTransfer -Source "https://github.com/carlhopkins/TCS-PreP-Tool/raw/refs/heads/main/DotNet/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
-Add-Type -Assembly System.Drawing
-$simage = [System.Drawing.Image]::FromFile("./setimage.jpg")
 Add-Type -Assembly System.Drawing
 $bimage = [System.Drawing.Image]::FromFile("./trekimage.jpg")
 Add-Type -Assembly System.Drawing
@@ -52,7 +48,7 @@ else{
 # GUI Specs
 $Form                         = New-Object system.Windows.Forms.Form
 $Form.ClientSize              = New-Object System.Drawing.Point(780,780)
-$Form.text                    = "TCS Machine Preparation Tool - v25.07"
+$Form.text                    = "TCS Machine Preparation Tool - v25.08"
 $Form.StartPosition           = "CenterScreen"
 $Form.TopMost                 = $false
 $Form.BackColor               = [System.Drawing.ColorTranslator]::FromHtml("#e9e9e9")
@@ -81,7 +77,7 @@ $Panel1.location                 = New-Object System.Drawing.Point(5,75)
 
 # Panel2 - Actions
 $Panel2                          = New-Object system.Windows.Forms.Panel
-$Panel2.height                   = 460
+$Panel2.height                   = 430
 $Panel2.width                    = 250
 $Panel2.location                 = New-Object System.Drawing.Point(265,75)
 
@@ -93,11 +89,18 @@ $warptweaks.location             = New-Object System.Drawing.Point(5,20)
 $warptweaks.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 $wingetapps                      = New-Object system.Windows.Forms.Button
-$wingetapps.Image                = $simage
+$wingetapps.text                 = "Install Application Packages"
 $wingetapps.width                = 205
-$wingetapps.height               = 205
+$wingetapps.height               = 68
 $wingetapps.location             = New-Object System.Drawing.Point(5,245)
 $wingetapps.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
+
+$dotnetapps                      = New-Object system.Windows.Forms.Button
+$dotnetapps.text                 = "Install DotNet Packages"
+$dotnetapps.width                = 205
+$dotnetapps.height               = 68
+$dotnetapps.location             = New-Object System.Drawing.Point(5,333)
+$dotnetapps.Font                 = New-Object System.Drawing.Font('Microsoft Sans Serif',10)
 
 # Panel3 - R/H Spacer
 $Panel3                          = New-Object system.Windows.Forms.Panel
@@ -109,7 +112,7 @@ $Panel3.location                 = New-Object System.Drawing.Point(525,75)
 $Panel4                          = New-Object system.Windows.Forms.Panel
 $Panel4.height                   = 65
 $Panel4.width                    = 730
-$Panel4.location                 = New-Object System.Drawing.Point(20,525)
+$Panel4.location                 = New-Object System.Drawing.Point(20,500)
 
 $Label10                         = New-Object system.Windows.Forms.Label
 $Label10.text                    = "Current Status:"
@@ -140,7 +143,7 @@ $PictureBox1.SizeMode            = [System.Windows.Forms.PictureBoxSizeMode]::zo
 
 $Form.controls.AddRange(@($Panel0,$Panel1,$Panel2,$Panel3,$Panel4))
 $Panel0.controls.AddRange(@($PictureBox1))
-$Panel2.controls.AddRange(@($warptweaks,$wingetapps))
+$Panel2.controls.AddRange(@($warptweaks,$wingetapps,$dotnetapps))
 $Panel4.controls.AddRange(@($Label10,$ResultText))
 
 # App loaded and Ready for User input
@@ -153,7 +156,7 @@ Write-Host "Cleanup in Progress..."
     $ResultText.text = "Cleanup in Progress..."
 
     # Pause to init
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 
 Write-Host "Disabling Telemetry..."
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
@@ -323,9 +326,9 @@ Write-Host "Cleanup complete! Please wait..."
     $ResultText.text = "Cleanup complete! Please wait..."
 
 # Pause to init
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 
-# End routine
+# End subroutine
 Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
     $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
 
@@ -337,7 +340,7 @@ Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
 
 # Pause to init
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 
 # 7-Zip Compression Tool
 Write-Host "Installing 7-Zip Compression Tool"
@@ -388,6 +391,13 @@ Write-Host "Installing Microsoft Office 365 Apps"
 #    if($?) { Write-Host "Installed Advanced IP Scanner" }
 #    $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
 
+# Notepad++ (AWAITING TESTING/FEEDBACK)
+#Write-Host "Installing Notepad++"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing Notepad++... Please Wait" 
+#    winget install -e --accept-source-agreements --accept-package-agreements --id Notepad++.Notepad++ | Out-Host
+#    if($?) { Write-Host "Installed Notepad++" }
+#    $ResultText.text = "`r`n" + "Finished Installing Notepad++" + "`r`n" + "`r`n" + "Ready for Next Task"
+
 # Draw Dot Io (AWAITING TESTING/FEEDBACK)
 #Write-Host "Installing Draw Dot Io"
 #    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
@@ -407,7 +417,20 @@ Write-Host "Installation complete! Please wait..."
     $ResultText.text = "Installation complete! Please wait..."
 
 # Pause to init
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
+
+# End subroutine
+Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+
+})
+
+$dotnetapps.Add_Click({
+Write-Host "Installation in Progress..."
+    $ResultText.text = "Installation in Progress..."
+
+# Pause to init
+Start-Sleep -Seconds 2
 
 # DotNet FX3 Install Routine (online version)
 Write-Host "Installing DotNetFx3. Please wait..."
@@ -416,17 +439,10 @@ Write-Host "Installing DotNetFx3. Please wait..."
     if($?) { Write-Host "The operation completed successfully." }
     $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
 
-# DotNet FX3 Install Routine (online version)
-#Write-Host "Installing DotNetFx3. Please wait..."
-#    $ResultText.text = "Installing DotNetFx3. Please wait..."
-#    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /LimitAccess /Source:./
-#    if($?) { Write-Host "The operation completed successfully." }
-#    $ResultText.text = "`r`n" + "Installation complete!" + "`r`n" + "`r`n" + "Please wait..."
-
 # Pause to init
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 
-# End routine
+# End subroutine
 Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
     $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
 
