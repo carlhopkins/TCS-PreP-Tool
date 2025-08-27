@@ -5,8 +5,8 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $ErrorActionPreference = 'SilentlyContinue'
 $wshell = New-Object -ComObject Wscript.Shell
-$Button = [System.Windows.MessageBoxButton]::YesNoCancel # Not required?
-$ErrorIco = [System.Windows.MessageBoxImage]::Error # Not required?
+$Button = [System.Windows.MessageBoxButton]::YesNoCancel
+$ErrorIco = [System.Windows.MessageBoxImage]::Error
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
 	Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
 	Exit
@@ -153,16 +153,16 @@ $Panel0.controls.AddRange(@($PictureBox1))
 $Panel2.controls.AddRange(@($warptweaks,$wingetapps,$dismonline,$dismoffline))
 $Panel4.controls.AddRange(@($Label10,$ResultText))
 
-# App loaded and Ready for User input
+# App loaded and waiting for user input
 Write-Host "TCS PreP Tool Ready...Please select action!"
 $ResultText.text = "TCS PreP Tool Ready...Please select action!"
 
-# Start automated cleanup processes
+# Start automated cleanup processes and apply system tweaks 
 $warptweaks.Add_Click({
 Write-Host "Cleanup in Progress..."
     $ResultText.text = "Cleanup in Progress..."
 
-    # Pause to init
+# Pause to init
 Start-Sleep -Seconds 2
 
 Write-Host "Disabling Telemetry..."
@@ -201,66 +201,17 @@ Write-Host "Disabling Advertising ID..."
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" -Name "DisabledByGroupPolicy" -Type DWord -Value 1
 
-Write-Host "Stopping and disabling Diagnostics Tracking Service..."
-    Stop-Service "DiagTrack" -WarningAction SilentlyContinue
-    Set-Service "DiagTrack" -StartupType Disabled
-    Write-Host "Stopping and disabling WAP Push Service..."
-    Stop-Service "dmwappushservice" -WarningAction SilentlyContinue
-    Set-Service "dmwappushservice" -StartupType Disabled
-    Write-Host "Enabling F8 boot menu options..."
+Write-Host "Enabling F8 boot menu options..."
     bcdedit /set `{current`} bootmenupolicy Legacy | Out-Null
-
-Write-Host "Stopping and disabling Home Groups services..."
-    Stop-Service "HomeGroupListener" -WarningAction SilentlyContinue
-    Set-Service "HomeGroupListener" -StartupType Disabled
-    Stop-Service "HomeGroupProvider" -WarningAction SilentlyContinue
-    Set-Service "HomeGroupProvider" -StartupType Disabled
-
-Write-Host "Stopping and disabling Superfetch service..."
-    Stop-Service "SysMain" -WarningAction SilentlyContinue
-    Set-Service "SysMain" -StartupType Disabled
 
 Write-Host "Disabling Hibernation..."
     Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Session Manager\Power" -Name "HibernteEnabled" -Type Dword -Value 0
-    If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings")) {
-        New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" | Out-Null
-    }
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" -Name "ShowHibernateOption" -Type Dword -Value 0
-    If ((get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name CurrentBuild).CurrentBuild -lt 22557) {
-    	Write-Host "Showing task manager details..."
-    	$taskmgr = Start-Process -WindowStyle Hidden -FilePath taskmgr.exe -PassThru
-    	Do {
-      		Start-Sleep -Milliseconds 100
-        	$preferences = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -ErrorAction SilentlyContinue
-    	} Until ($preferences)
-    	Stop-Process $taskmgr
-    	$preferences.Preferences[28] = 0
-    	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -Type Binary -Value $preferences.Preferences
-    } else {Write-Host "Task Manager patch not run in builds 22557+ due to bug"}
-
-Write-Host "Showing file operations details..."
-    If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager")) {
-        New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager" | Out-Null
-    }
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager" -Name "EnthusiastMode" -Type DWord -Value 1
-
-Write-Host "Hiding Task View button..."
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 
 Write-Host "Hiding People icon..."
     If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People")) {
         New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" -Name "PeopleBand" -Type DWord -Value 0
-
-Write-Host "Hide tray icons..."
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "EnableAutoTray" -Type DWord -Value 1
-
-Write-Host "Changing default Explorer view to This PC..."
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
-
-Write-Host "Hiding 3D Objects icon from This PC..."
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
 
 Write-Host "Disable News and Interests"
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" -Name "EnableFeeds" -Type DWord -Value 0
@@ -272,18 +223,10 @@ Write-Host "Disable Meet Now button"
     }
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-Write-Host "Stopping and disabling Diagnostics Tracking Service..."
-    Stop-Service "DiagTrack"
-    Set-Service "DiagTrack" -StartupType Disabled
-
-Write-Host "Showing known file extensions..."
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0        
-
+# Remove default Windows Bloatware Pre-installed Apps 
 Write-Host "Removing Bloatware"
-
 $Bloatware = @(
-    # Sponsored Windows AppX Apps
-    # Add sponsored/featured apps to remove in the "*AppName*" format
+# Add sponsored/featured apps to remove in the "*AppName*" format
     "*EclipseManager*"
     "*ActiproSoftwareLLC*"
     "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
@@ -341,13 +284,16 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 
 })
 
-# Winget Utilities Install Routine, please see MANIFEST.md for current and pending list of apps.
+# Winget Utilities Install Routine
+# Please see MANIFEST.md for current list of apps deployed by this method
 $wingetapps.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
 
 # Pause to init
 Start-Sleep -Seconds 2
+
+# TCS ESSENTIAL UTILITIES
 
 # 7-Zip Compression Tool
 Write-Host "Installing 7-Zip Compression Tool"
@@ -356,12 +302,12 @@ Write-Host "Installing 7-Zip Compression Tool"
     if($?) { Write-Host "Installed 7-Zip Compression Tool" }
     $ResultText.text = "`r`n" + "Finished Installing 7-Zip Compression Tool" + "`r`n" + "`r`n" + "Ready for Next Task"
 
-# Paint Dot Net
-Write-Host "Installing Paint Dot Net"
-    $ResultText.text = "`r`n" +"`r`n" + "Installing Paint Dot Net... Please Wait" 
-    winget install -e --accept-source-agreements --accept-package-agreements --id dotPDNLLC.paintdotnet | Out-Host
-    if($?) { Write-Host "Installed Paint Dot Net" }
-    $ResultText.text = "`r`n" + "Finished Installing Paint Dot Net" + "`r`n" + "`r`n" + "Ready for Next Task"
+# VLC media player
+Write-Host "Installing VLC media player"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing VLC media player... Please Wait" 
+    winget install -e --accept-source-agreements --accept-package-agreements --id VideoLAN.VLC | Out-Host
+    if($?) { Write-Host "Installed VLC media player" }
+    $ResultText.text = "`r`n" + "Finished Installing VLC media player" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # PDF reDirect
 Write-Host "Installing PDF reDirect"
@@ -370,12 +316,37 @@ Write-Host "Installing PDF reDirect"
     if($?) { Write-Host "Installed PDF reDirect" }
     $ResultText.text = "`r`n" + "Finished Installing PDF reDirect" + "`r`n" + "`r`n" + "Ready for Next Task"
 
+# TCS STANDARD APPLICATIONS
+
 # Foxit PDF Reader
 Write-Host "Installing Foxit PDF Reader"
     $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
     winget install -e --accept-source-agreements --accept-package-agreements --id Foxit.FoxitReader | Out-Host
     if($?) { Write-Host "Installed Foxit PDF Reader" }
     $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Notepad++
+Write-Host "Installing Notepad++"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Notepad++... Please Wait" 
+    winget install -e --accept-source-agreements --accept-package-agreements --id Notepad++.Notepad++ | Out-Host
+    if($?) { Write-Host "Installed Notepad++" }
+    $ResultText.text = "`r`n" + "Finished Installing Notepad++" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Draw Dot Io
+Write-Host "Installing Draw Dot Io"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
+    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
+    if($?) { Write-Host "Installed Draw Dot Io" }
+    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# Advanced IP Scanner
+Write-Host "Installing Advanced IP Scanner"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing Advanced IP Scanner... Please Wait" 
+    winget install -e --accept-source-agreements --accept-package-agreements --id Famatech.AdvancedIPScanner | Out-Host
+    if($?) { Write-Host "Installed Advanced IP Scanner" }
+    $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
+
+# TCS CLIENT APPLICATIONS
 
 # Microsoft Office 365 Apps
 Write-Host "Installing Microsoft Office 365 Apps"
@@ -384,33 +355,12 @@ Write-Host "Installing Microsoft Office 365 Apps"
     if($?) { Write-Host "Installed Microsoft Office 365 Apps" }
     $ResultText.text = "`r`n" + "Finished Installing Microsoft Office 365 Apps" + "`r`n" + "`r`n" + "Ready for Next Task"
 
-# PuTTY (AWAITING TESTING/FEEDBACK)
-#Write-Host "Installing PuTTY"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing PuTTY... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id PuTTY.PuTTY | Out-Host
-#    if($?) { Write-Host "Installed PuTTY" }
-#    $ResultText.text = "`r`n" + "Finished Installing PuTTY" + "`r`n" + "`r`n" + "Ready for Next Task"
-
-# Advanced IP Scanner (AWAITING TESTING/FEEDBACK)
-#Write-Host "Installing Advanced IP Scanner"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing Advanced IP Scanner... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id Famatech.AdvancedIPScanner | Out-Host
-#    if($?) { Write-Host "Installed Advanced IP Scanner" }
-#    $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
-
-# Notepad++ (AWAITING TESTING/FEEDBACK)
-#Write-Host "Installing Notepad++"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing Notepad++... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id Notepad++.Notepad++ | Out-Host
-#    if($?) { Write-Host "Installed Notepad++" }
-#    $ResultText.text = "`r`n" + "Finished Installing Notepad++" + "`r`n" + "`r`n" + "Ready for Next Task"
-
-# Draw Dot Io (AWAITING TESTING/FEEDBACK)
-#Write-Host "Installing Draw Dot Io"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
-#    if($?) { Write-Host "Installed Draw Dot Io" }
-#    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
+# WatchGuard Mobile VPN with SSL client
+Write-Host "Installing WatchGuard Mobile VPN with SSL client"
+    $ResultText.text = "`r`n" +"`r`n" + "Installing WatchGuard Mobile VPN with SSL client... Please Wait" 
+    winget install -e --accept-source-agreements --accept-package-agreements --id WatchGuard.MobileVPNWithSSLClient | Out-Host
+    if($?) { Write-Host "Installed WatchGuard Mobile VPN with SSL client" }
+    $ResultText.text = "`r`n" + "Finished Installing WatchGuard Mobile VPN with SSL client" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # WINGET MANIFEST TEMPLATE - COPY BELOW TO USE
 # APP NAME
@@ -432,6 +382,8 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 
 })
 
+# DISM Install Routine (online version)
+# Please see MANIFEST.md for current list of apps deployed by this method
 $dismonline.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
@@ -439,7 +391,6 @@ Write-Host "Installation in Progress..."
 # Pause to init
 Start-Sleep -Seconds 2
 
-# DISM Install Routine (online version)
 Write-Host "Installing DotNetFx3. Please wait..."
     $ResultText.text = "Installing DotNetFx3. Please wait..."
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
@@ -455,6 +406,8 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 
 })
 
+# DISM Install Routine (offline version)
+# Please see MANIFEST.md for current list of apps deployed by this method
 $dismoffline.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
@@ -462,7 +415,6 @@ Write-Host "Installation in Progress..."
 # Pause to init
 Start-Sleep -Seconds 2
 
-# DISM Install Routine (offline version)
 Write-Host "Installing DotNetFx3. Please wait..."
     $ResultText.text = "Installing DotNetFx3. Please wait..."
     Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/Packages/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
