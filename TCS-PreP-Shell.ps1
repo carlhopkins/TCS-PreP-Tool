@@ -319,11 +319,12 @@ Write-Host "Installing PDF reDirect"
 # TCS STANDARD APPLICATIONS
 
 # Foxit PDF Reader
-Write-Host "Installing Foxit PDF Reader"
-    $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
-    winget install -e --accept-source-agreements --accept-package-agreements --id Foxit.FoxitReader | Out-Host
-    if($?) { Write-Host "Installed Foxit PDF Reader" }
-    $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
+# Note: no longer functioning?
+#Write-Host "Installing Foxit PDF Reader"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
+#    winget install -e --accept-source-agreements --accept-package-agreements --id Foxit.FoxitReader | Out-Host
+#    if($?) { Write-Host "Installed Foxit PDF Reader" }
+#    $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Notepad++
 Write-Host "Installing Notepad++"
@@ -333,11 +334,11 @@ Write-Host "Installing Notepad++"
     $ResultText.text = "`r`n" + "Finished Installing Notepad++" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Draw Dot Io
-Write-Host "Installing Draw Dot Io"
-    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
-    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
-    if($?) { Write-Host "Installed Draw Dot Io" }
-    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
+#Write-Host "Installing Draw Dot Io"
+#    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
+#    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
+#    if($?) { Write-Host "Installed Draw Dot Io" }
+#    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Advanced IP Scanner
 Write-Host "Installing Advanced IP Scanner"

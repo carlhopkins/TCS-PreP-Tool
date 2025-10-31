@@ -6,9 +6,9 @@
 + VLC media player
 + PDF reDirect
 + TCS STANDARD APPLICATIONS
-+ Foxit PDF Reader
++ ~~Foxit PDF Reader~~
 + Notepad++
-+ Draw Dot Io
++ ~~Draw Dot Io~~
 + Advanced IP Scanner
 + TCS CLIENT APPLICATIONS
 + Microsoft Office 365 Apps
